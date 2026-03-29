@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Resources</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f3f4f6;
+            /* Layout for the whole page */
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* 1. The Stack Wrapper */
+        .card-stack {
+            display: flex;
+            flex-direction: column; /* Stacks items vertically */
+            gap: 24px;              /* Space between each card */
+            width: 100%;
+            max-width: 500px;       /* Limits overall width */
+        }
+
+        /* 2. The Individual Card */
+        .expanding-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            
+            /* Expansion logic */
+            height: auto; 
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            
+            transition: box-shadow 0.2s ease;
+        }
+
+        .expanding-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Typography */
+        h2 { color: #111827; font-size: 1.25rem; }
+        p { color: #4b5563; line-height: 1.5; font-size: 0.95rem; }
+        
+        .badge {
+            display: inline-block; /* Allows padding and width to work */
+            padding: 6px 16px;      /* Vertical 6px, Horizontal 16px */
+            background-color: #eef2ff; /* Added a light background so you can see the width */
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #6366f1;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- The Wrapper that holds the stack -->
+    <div class="card-stack">
+
+         <div class="expanding-card">
+            <h2>Web based Python IDE Tutorials</h2>
+            <span class="medium">Copy and paste your python code and run it without any local installation</span>            
+            <p><a href="https://pythononline.net" target=_blank>pythononline.net</a></p>
+            <p><a href="https://Online-Python.com" target=_blank>Online-Python.com</a></p>
+             <p><a href="https://python-fiddle.com/" target=_blank>python-fiddle.com/</a></p>
+              <p><a href="https://pythontutor.com/" target=_blank>Python Tutor</a> Excellent for beginners; it visualizes exactly what happens in memory as each line of code executes.</p>
+              <p><a href="https://colab.research.google.com/" target=_blank>Google Collab</a> A Jupyter Notebook-style environment that is ideal for data science and machine learning tasks.</p>
+        </div>
+
+         <div class="expanding-card">
+            <h2> Python Installation Tutorials</h2>
+            <p>General Installation: <a href="https://www.youtube.com/watch?v=NfTrFhfqmFY" target="_blank">This YouTube tutorial </a> walks you through installing Python on Windows, Mac, or Linux, including setting up the system PATH.</p>
+            
+        </div>
+
+        <div class="expanding-card">
+            <h2>Python IDE Tutorials</h2>
+             <span class="medium">Install one of these for serious code development</span>
+            <p><b>Visual Studio Code (VSC)</b>: A beginner-friendly guide to setting up VS Code for Python can be found in this <a href="https://www.youtube.com/watch?v=cu_ykIfBprI" target=_blank>YouTube video</a>, which covers installing the Python extension by Microsoft for IntelliSense, debugging, and linting.</p>
+            <p><b>PyCharm</b>: For installing the PyCharm IDE (Community Edition), this <a href="https://www.youtube.com/watch?v=8LeHuJnHVm4" target=_blank>YouTube tutorial </a>provides a step-by-step walkthrough of downloading and setting up the environment.</p>
+        </div>
+
+        <div class="expanding-card">
+            <h2>Python, Numpy, SciPy, Matplotlib, Jax tutorials</h2>
+            <a href="https://cs231n.github.io/python-numpy-tutorial/" target="_blank">Beginner Tutorial on Python, NumPy, SciPy, Matplotlib on Jupyter</a>
+            <br><a href="https://cs231n.github.io/python-numpy-tutorial/" target="_blank">NumPy Tutorial on Jupyter</a>
+            <br><a href="https://cs231n.github.io/python-numpy-tutorial/" target="_blank">NumPy: the absolute basics for beginners</a>
+            <br><a href="https://realpython.com/numpy-tutorial/" target="_blank">NumPy Tutorial: Your First Steps Into Data Science in Python</a>
+            <br><a href="https://realpython.com/numpy-tutorial/" target="_blank">NumPy Crash Course - Complete Tutorial</a> (YouTube)
+            <br><a href="https://lectures.scientific-python.org/" target="_blank">Scientific Python Lectures</a> (cover the entire scientific Python ecosystem, from basic Python and NumPy to specialized SciPy functionality like optimization, integration, and statistics)
+            <br><a href="https://www.youtube.com/watch?v=jmX4FOUEfgU" target="_blank">SciPy Tutorial: For Physicists, Engineers, and Mathematicians</a> (YouTube)
+            <br><a href="https://www.youtube.com/watch?v=h31cyV1y2nE" target="_blank">Optimization with Python and SciPy: Multiple Constraints</a> (YouTube)
+            <br><a href="https://www.youtube.com/watch?v=7Lc2AxiM17o" target="_blank">Learn Matplotlib in 30 Minutes - Python Matplotlib Tutorial</a> (YouTube)
+            <br><a href="https://www.youtube.com/watch?v=OZOOLe2imFo" target="_blank">Matplotlib Full Python Course - Data Science Fundamentals</a> (YouTube)
+            <br><a href="https://docs.jax.dev/en/latest/jax-101.html" target="_blank">Jax 101</a>
+        </div>
+
+    </div>
+<h1></h1>
+
+<p></p>
+
+
+</body>
+</html>
