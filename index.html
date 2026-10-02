@@ -1,17 +1,600 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <title>Pendulum Swings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Computational Pendulum</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        }
+                    },
+                    animation: {
+                        'swing': 'swing 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        swing: {
+                            '0%': { transform: 'rotate(25deg)' },
+                            '100%': { transform: 'rotate(-25deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <h1>Pendulum Swings</h1>
-    <p>
-        Python Resources: <a href="scripts.html">Install, learn, run, practice</a> page.
-       
-    </p>
-    <p>
-         Python Scripts: <a href="scripts.html">Book Scripts</a> page.
-    </p>
+<body class="antialiased bg-slate-50 text-slate-800 font-sans selection:bg-brand-500 selection:text-white flex flex-col min-h-screen">
+
+    <nav class="bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-800 w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    <span class="font-bold text-white tracking-tight text-lg">The Computational Pendulum</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#about" class="text-slate-300 hover:text-white transition-colors">About</a>
+                    <a href="#structure" class="text-slate-300 hover:text-white transition-colors">Structure</a>
+                    <a href="#audience" class="text-slate-300 hover:text-white transition-colors">For Educators</a>
+                    <a href="#contact" class="text-slate-300 hover:text-white transition-colors">Contact</a>
+                    <a href="https://pendulumswings.github.io/scripts.html" class="inline-flex items-center gap-1.5 rounded-lg bg-slate-800/90 px-3.5 py-2 text-sm font-semibold text-sky-300 ring-1 ring-inset ring-sky-400/40 hover:bg-slate-800 hover:text-white hover:ring-sky-400 transition-all">
+                        Code Directory <span aria-hidden="true">&rarr;</span>
+                    </a>
+                    <a href="#get-book" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-500 transition-colors">
+                        Get the Book
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative bg-slate-950 overflow-hidden pt-20 pb-32 lg:pt-32 lg:pb-40">
+        <!-- Abstract background elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-1/2 -right-1/4 w-[1000px] h-[1000px] rounded-full bg-brand-900/20 blur-3xl mix-blend-screen opacity-50"></div>
+            <div class="absolute -bottom-1/2 -left-1/4 w-[800px] h-[800px] rounded-full bg-indigo-900/20 blur-3xl mix-blend-screen opacity-50"></div>
+            <!-- Grid pattern -->
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-50"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+                
+                <!-- Hero Text -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-semibold text-brand-100 bg-brand-500/20 ring-1 ring-brand-400/50 mb-6 shadow-sm shadow-brand-900/50">
+                        <span class="flex h-2 w-2 rounded-full bg-brand-400 mr-2 animate-pulse"></span>
+                        Companion Website & Code Repository
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
+                        Solving the Pendulum with <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-300">Physics, Code, and AI.</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-slate-300 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        A progressive journey from high school Mechanics to Neural Networks. 
+                        By systematically analyzing the pendulum, discover that physics, pure mathematics, and machine learning are not isolated silos, but interconnected lenses.
+                    </p>
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start">
+                        <a href="#get-book" class="inline-flex justify-center items-center gap-2 rounded-lg bg-brand-600 px-6 py-3.5 text-base font-semibold text-white shadow-sm hover:bg-brand-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            Get the Book
+                        </a>
+                        <a href="https://pendulumswings.github.io/scripts.html" class="inline-flex justify-center items-center rounded-lg bg-slate-800 px-6 py-3.5 text-base font-semibold text-white shadow-sm hover:bg-slate-700 ring-1 ring-inset ring-slate-700 transition-all">
+                            Browse Code Directory
+                        </a>
+                    </div>
+                    <!-- Quick Retailer Badges -->
+                    <div class="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2 text-sm text-slate-400">
+                        <span>By <strong class="text-slate-200">Horos Kyklos</strong></span>
+                        <span class="hidden sm:inline text-slate-700">&bull;</span>
+                        <div class="flex items-center gap-4">
+                            <a href="https://leanpub.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sky-400 hover:text-sky-300 font-medium transition-colors">
+                                <span>Leanpub (PDF)</span>
+                                <span aria-hidden="true">&nearr;</span>
+                            </a>
+                            <span class="text-slate-700">|</span>
+                            <a href="https://amazon.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 font-medium transition-colors">
+                                <span>Amazon (Print)</span>
+                                <span aria-hidden="true">&nearr;</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Graphic (Real-Time RK4 Nonlinear Pendulum) -->
+                <div class="hidden lg:flex lg:col-span-5 relative h-96 flex-col items-center justify-center">
+                    <div class="relative flex items-center justify-center">
+                        <svg width="340" height="340" viewBox="0 0 340 340" class="overflow-visible">
+                            <!-- Full 360-degree circular orbit path -->
+                            <circle cx="170" cy="170" r="130" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="4 6"/>
+                            <!-- Vertical equilibrium reference line -->
+                            <line x1="170" y1="40" x2="170" y2="300" stroke="#1e293b" stroke-width="1" stroke-dasharray="2 4"/>
+                            <!-- Pivot support stand -->
+                            <line x1="145" y1="170" x2="195" y2="170" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+                            <!-- The Pendulum (Driven by RK4 JS Solver) -->
+                            <g id="pendulum-group" transform="rotate(0, 170, 170)">
+                                <!-- Rod -->
+                                <line x1="170" y1="170" x2="170" y2="300" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+                                <!-- Bob glowing shadow -->
+                                <circle cx="170" cy="300" r="24" fill="#0ea5e9" opacity="0.25" class="blur-md"/>
+                                <!-- Bob -->
+                                <circle cx="170" cy="300" r="16" fill="url(#bobGrad)"/>
+                            </g>
+                            <!-- Center Pivot Pin -->
+                            <circle cx="170" cy="170" r="5" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
+                            <defs>
+                                <radialGradient id="bobGrad" cx="30%" cy="30%" r="70%">
+                                    <stop offset="0%" stop-color="#7dd3fc"/>
+                                    <stop offset="100%" stop-color="#0284c7"/>
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <!-- Live Initial State Readout, Regime Badge & Re-roll Button -->
+                    <div class="mt-2 inline-flex flex-wrap items-center justify-center gap-3 rounded-full bg-slate-900/90 px-4 py-1.5 text-xs font-mono text-slate-300 ring-1 ring-slate-800">
+                        <span id="regime-badge" class="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold bg-sky-500/15 text-sky-400 ring-1 ring-inset ring-sky-500/30">
+                            Oscillation
+                        </span>
+                        <span id="theta0-readout" class="text-slate-200">&theta;₀ = 0.0&deg;, &omega;₀ = 0.0 rad/s</span>
+                        <button id="randomize-pendulum-btn" type="button" class="text-sky-400 hover:text-white transition-colors underline decoration-slate-600 underline-offset-2">
+                            New State
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section id="about" class="py-20 bg-white border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight mb-4">A Tangible Anchor for Advanced Concepts</h2>
+                    <p class="text-lg text-slate-600">
+                        The simple pendulum is typically relegated to the first few weeks of an introductory physics course. 
+                        However, when you push beyond the standard small-angle approximation, it reveals itself as a powerful theoretical laboratory.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Pillar 1 -->
+                    <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 text-blue-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Classical Mechanics</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Starting with kinematics and Newton's Second Law, we derive equations of motion, tension, and phase portraits. We bridge standard AP Physics directly into exact rigid body dynamics.
+                        </p>
+                    </div>
+
+                    <!-- Pillar 2 -->
+                    <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6 text-emerald-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Computational Physics</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Continuous periodic systems accumulate errors rapidly. Learn to solve the exact large-angle pendulum using 4th-order Runge-Kutta (RK4) integration via hands-on Python scripts.
+                        </p>
+                    </div>
+
+                    <!-- Pillar 3 -->
+                    <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6 text-purple-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Machine Learning</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            The pendulum is the perfect baseline for AI. We use JAX and Google Colab to train Physics-Informed Neural Networks (PINNs) and explore Physical Reservoir Computing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="structure" class="py-20 bg-slate-50 border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900 tracking-tight mb-6">The Structure of the Journey</h2>
+                        <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                            To help you pace your learning, the book is divided into three main arcs. Each theory chapter is tightly integrated with computational scripts and is immediately followed by a dedicated chapter of fully solved exercises acting as an open-ended laboratory.
+                        </p>
+                        
+                        <div class="space-y-8">
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold font-mono text-sm mt-1">I</div>
+                                <div>
+                                    <h4 class="text-lg font-bold text-slate-900 mb-1">Foundations and Simulations</h4>
+                                    <p class="text-slate-600 text-sm">We begin with AP-level concepts (kinematics, SHM, energy conservation) and push beyond them to derive exact analytical solutions. Here, we introduce our first Python scripts to visualize dynamics and phase spaces.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold font-mono text-sm mt-1">II</div>
+                                <div>
+                                    <h4 class="text-lg font-bold text-slate-900 mb-1">Exact Solutions and Machine Learning</h4>
+                                    <p class="text-slate-600 text-sm">Stripping away standard idealizations, we use heavier computation (RK4 integration) to solve the exact pendulum. We then take our first leap into machine learning by training Neural Networks to learn these dynamics.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold font-mono text-sm mt-1">III</div>
+                                <div>
+                                    <h4 class="text-lg font-bold text-slate-900 mb-1">Explorations in Modern Dynamics</h4>
+                                    <p class="text-slate-600 text-sm">With a strong foundation built, we shift to broad exploration. We investigate non-inertial reference frames, Koopman operator theory, and Reservoir Computing, treating the final exercises as a creative sandbox.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Code Highlight Box -->
+                    <div class="mt-12 lg:mt-0">
+                        <div class="bg-slate-900 rounded-2xl shadow-xl overflow-hidden border border-slate-800">
+                            <div class="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                <span class="ml-2 text-xs font-mono text-slate-400">ch06/pinn_training.py</span>
+                            </div>
+                            <div class="p-6">
+                                <pre class="font-mono text-sm text-slate-300 overflow-x-auto"><code><span class="text-purple-400">import</span> jax.numpy <span class="text-purple-400">as</span> jnp
+<span class="text-purple-400">from</span> jax <span class="text-purple-400">import</span> grad, jit, vmap
+
+<span class="text-slate-500"># Define the Physics-Informed Loss Function</span>
+<span class="text-brand-400">def</span> <span class="text-blue-300">physics_loss</span>(params, t):
+    theta = <span class="text-blue-300">neural_network</span>(params, t)
+    
+    <span class="text-slate-500"># d^2(theta)/dt^2 + (g/L)*sin(theta) = 0</span>
+    theta_t = <span class="text-blue-300">grad</span>(neural_network, argnums=1)
+    theta_tt = <span class="text-blue-300">grad</span>(theta_t, argnums=1)
+    
+    residual = <span class="text-blue-300">theta_tt</span>(params, t) + (g/L) * jnp.<span class="text-blue-300">sin</span>(theta)
+    <span class="text-purple-400">return</span> jnp.<span class="text-blue-300">mean</span>(residual**<span class="text-orange-400">2</span>)</code></pre>
+                            </div>
+                            <div class="bg-slate-800/50 p-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <p class="text-sm text-slate-300 font-medium">Ready to run the simulations?</p>
+                                <a href="https://pendulumswings.github.io/scripts.html" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-500 transition-colors">
+                                    Open Script Directory
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="audience" class="py-20 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl font-bold text-slate-900 tracking-tight mb-6">A Toolkit for Educators & Self-Learners</h2>
+                <p class="text-lg text-slate-600 mb-10 leading-relaxed">
+                    Teachers of AP Physics or freshman mechanics often struggle to find rigorous, ready-to-use materials that push beyond the standard curriculum. Because every advanced topic is anchored to the universally taught simple pendulum, educators can easily integrate these chapters as honors-level extensions, capstone projects, or computational labs. For software developers, data scientists, and curious independent learners, the book provides a focused, math-first bridge into modern physics and AI without the cognitive overload of constantly changing theoretical contexts.
+                </p>
+                <div class="inline-flex items-center justify-center gap-6 p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div class="flex flex-col items-center">
+                        <span class="text-3xl font-bold text-brand-600 mb-1">100%</span>
+                        <span class="text-sm text-slate-500 font-medium uppercase tracking-wider">Fully Solved Exercises</span>
+                    </div>
+                    <div class="w-px h-12 bg-slate-200"></div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-3xl font-bold text-brand-600 mb-1">JAX</span>
+                        <span class="text-sm text-slate-500 font-medium uppercase tracking-wider">Colab Ready Code</span>
+                    </div>
+                    <div class="w-px h-12 bg-slate-200 hidden sm:block"></div>
+                    <div class="flex flex-col items-center hidden sm:flex">
+                        <span class="text-3xl font-bold text-brand-600 mb-1">OER</span>
+                        <span class="text-sm text-slate-500 font-medium uppercase tracking-wider">Open Source Repo</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="get-book" class="py-20 bg-slate-900 text-white border-t border-slate-800 relative overflow-hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <span class="text-brand-500 font-semibold tracking-wider uppercase text-sm">Available Now</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 mb-4">Get Your Copy of the Book</h2>
+                    <p class="text-slate-300 text-lg">
+                        Choose your preferred format below. Both digital and print editions include full access to the open-source companion scripts and interactive Google Colab notebooks.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Leanpub Card -->
+                    <div class="bg-slate-800/70 backdrop-blur-sm rounded-2xl p-8 border border-slate-700 flex flex-col justify-between hover:border-brand-500/60 transition-all shadow-lg">
+                        <div>
+                            <div class="flex items-center justify-between mb-6">
+                                <span class="inline-flex items-center rounded-full bg-sky-500/10 px-3 py-1 text-xs font-semibold text-sky-400 ring-1 ring-inset ring-sky-500/30">
+                                    Digital Edition
+                                </span>
+                                <span class="text-xs font-mono text-slate-400">PDF</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Leanpub</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                                Ideal for reading on tablets or laptops alongside your code editor. Includes a DRM-free PDF download, clickable hyperlinks to every Colab notebook, and free lifetime updates.
+                            </p>
+                        </div>
+                        <!-- Replace href with your exact Leanpub book URL -->
+                        <a href="https://leanpub.com/" target="_blank" rel="noopener noreferrer" class="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-brand-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-500 transition-colors">
+                            <span>Get Digital Book on Leanpub</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Amazon Card -->
+                    <div class="bg-slate-800/70 backdrop-blur-sm rounded-2xl p-8 border border-slate-700 flex flex-col justify-between hover:border-amber-500/60 transition-all shadow-lg">
+                        <div>
+                            <div class="flex items-center justify-between mb-6">
+                                <span class="inline-flex items-center rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-400 ring-1 ring-inset ring-amber-500/30">
+                                    Print Edition
+                                </span>
+                                <span class="text-xs font-mono text-slate-400">Paperback</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Amazon</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                                Prefer working through derivations with pen and paper? Order the physical print edition for your desk or classroom library.
+                            </p>
+                        </div>
+                        <!-- Replace href with your exact Amazon book URL -->
+                        <a href="https://amazon.com/" target="_blank" rel="noopener noreferrer" class="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-amber-500 px-5 py-3.5 text-sm font-semibold text-slate-950 shadow-sm hover:bg-amber-400 transition-colors">
+                            <span>Order on Amazon</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-white border-t border-slate-200">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-brand-600 font-semibold tracking-wider uppercase text-sm">Feedback &amp; Questions</span>
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight mt-2 mb-4">Contact the Author</h2>
+                    <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+                        Have a question about a derivation, found a typo, or using the book in your course? Send a private message below.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-8 sm:p-10 border border-slate-200 shadow-sm">
+                    <form id="contact-form" action="https://docs.google.com/forms/d/e/1FAIpQLSfqXPw8Piq1xjiH7Xq90REiF_4IxdINRzwfVXu9BlOlehf54Q/formResponse" method="POST" class="space-y-6">
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">Your Email <span class="text-slate-400 font-normal">(for replies)</span></label>
+                            <input type="email" id="email" name="entry.1169113649" required placeholder="ada@example.com"
+                                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all">
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-sm font-semibold text-slate-700 mb-2">Message</label>
+                            <textarea id="message" name="entry.1658311063" rows="4" required placeholder="Write your question or feedback here..."
+                                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="human-check" class="block text-sm font-semibold text-slate-700 mb-2">Spam Check: Type <span class="font-mono text-brand-600 font-bold">human</span> below</label>
+                            <input type="text" id="human-check" name="entry.1718910655" required placeholder="human" autocomplete="off"
+                                class="w-full sm:w-64 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all">
+                        </div>
+
+                        <!-- Honeypot anti-spam field (hidden from real users) -->
+                        <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off">
+
+                        <div id="form-status" class="hidden rounded-xl p-4 text-sm font-medium"></div>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                            <p class="text-xs text-slate-500">
+                                Your message is sent privately to the author and is never posted publicly.
+                            </p>
+                            <button id="contact-submit-btn" type="submit"
+                                class="w-full sm:w-auto inline-flex justify-center items-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-500 transition-colors">
+                                <span>Send Message</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-950 py-12 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                <span class="font-bold text-white tracking-tight">The Computational Pendulum</span>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-6 text-sm text-slate-400 font-medium">
+                <a href="#get-book" class="hover:text-white transition-colors">Get the Book</a>
+                <a href="https://leanpub.com/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Leanpub</a>
+                <a href="https://amazon.com/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Amazon</a>
+                <a href="https://pendulumswings.github.io/scripts.html" class="hover:text-white transition-colors">Code Directory</a>
+                <a href="#contact" class="hover:text-white transition-colors">Contact</a>
+                <a href="https://github.com/pendulumswings/pendulumswings.github.io" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub Repository</a>
+            </div>
+
+            <p class="text-slate-500 text-sm">
+                &copy; 2024 Horos Kyklos. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const pendulumGroup = document.getElementById('pendulum-group');
+            const readout = document.getElementById('theta0-readout');
+            const regimeBadge = document.getElementById('regime-badge');
+            const randomizeBtn = document.getElementById('randomize-pendulum-btn');
+            if (!pendulumGroup) return;
+
+            // Physical parameters: d^2(theta)/dt^2 = -(g/L)*sin(theta)
+            const omega0Sq = 3.2; // Gentler natural frequency squared (g/L) for a relaxed visual pace
+            let theta = 0;        // Current angle in radians (0 = bottom, pi = top)
+            let omega = 0;        // Angular velocity in rad/s
+            let lastTime = null;
+
+            // Randomly initialize into either Oscillation (E < 2mgL) or Rotation (E > 2mgL)
+            function randomizeInitialState() {
+                const isRotation = Math.random() < 0.5;
+                let deg = 20 + Math.random() * 320;
+                if (Math.abs(deg - 180) < 8) {
+                    deg = deg < 180 ? 170 : 190;
+                }
+                theta = (deg * Math.PI) / 180;
+
+                if (isRotation) {
+                    // Pick a gentle speed at the top apex so the gravitational wobble (dn) is slow and clear
+                    const omegaTop = 0.7 + Math.random() * 1.1;
+                    const direction = Math.random() < 0.5 ? 1 : -1;
+                    // Energy conservation: 0.5 * omega^2 - omega0Sq * cos(theta) = 0.5 * omegaTop^2 + omega0Sq
+                    omega = direction * Math.sqrt(omegaTop * omegaTop + 2 * omega0Sq * (1 + Math.cos(theta)));
+
+                    if (regimeBadge) {
+                        regimeBadge.textContent = 'Rotation (E > 2mgl)';
+                        regimeBadge.className = 'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold bg-amber-500/15 text-amber-400 ring-1 ring-inset ring-amber-500/30';
+                    }
+                } else {
+                    // Release from rest (or gentle sub-critical push) so it oscillates back and forth
+                    omega = 0;
+
+                    if (regimeBadge) {
+                        regimeBadge.textContent = 'Oscillation (E < 2mgl)';
+                        regimeBadge.className = 'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold bg-sky-500/15 text-sky-400 ring-1 ring-inset ring-sky-500/30';
+                    }
+                }
+
+                if (readout) {
+                    const sign = omega > 0 ? '+' : '';
+                    readout.innerHTML = `&theta;₀ = ${deg.toFixed(0)}&deg;, &omega;₀ = ${sign}${omega.toFixed(1)} rad/s`;
+                }
+                updateRender();
+            }
+
+            // 4th-Order Runge-Kutta (RK4) step for exact large-angle dynamics
+            function stepRK4(dt) {
+                const fTheta = (th, om) => om;
+                const fOmega = (th) => -omega0Sq * Math.sin(th);
+
+                const k1Th = fTheta(theta, omega);
+                const k1Om = fOmega(theta);
+
+                const k2Th = fTheta(theta + 0.5 * dt * k1Th, omega + 0.5 * dt * k1Om);
+                const k2Om = fOmega(theta + 0.5 * dt * k1Th);
+
+                const k3Th = fTheta(theta + 0.5 * dt * k2Th, omega + 0.5 * dt * k2Om);
+                const k3Om = fOmega(theta + 0.5 * dt * k2Th);
+
+                const k4Th = fTheta(theta + dt * k3Th, omega + dt * k3Om);
+                const k4Om = fOmega(theta + dt * k3Th);
+
+                theta += (dt / 6) * (k1Th + 2 * k2Th + 2 * k3Th + k4Th);
+                omega += (dt / 6) * (k1Om + 2 * k2Om + 2 * k3Om + k4Om);
+            }
+
+            function updateRender() {
+                // Convert counter-clockwise mathematical angle to SVG rotation around pivot (170, 170)
+                const angleDeg = -(theta * 180) / Math.PI;
+                pendulumGroup.setAttribute('transform', `rotate(${angleDeg}, 170, 170)`);
+            }
+
+            function animate(timestamp) {
+                if (lastTime === null) lastTime = timestamp;
+                // Cap delta time so tab switching doesn't cause large jumps
+                const dt = Math.min((timestamp - lastTime) / 1000, 0.05);
+                lastTime = timestamp;
+
+                // Sub-step RK4 for high numerical accuracy
+                const subSteps = 4;
+                for (let i = 0; i < subSteps; i++) {
+                    stepRK4(dt / subSteps);
+                }
+
+                updateRender();
+                requestAnimationFrame(animate);
+            }
+
+            if (randomizeBtn) {
+                randomizeBtn.addEventListener('click', randomizeInitialState);
+            }
+
+            // Initialize with a random state on page load and start the RK4 loop
+            randomizeInitialState();
+            requestAnimationFrame(animate);
+
+            const contactForm = document.getElementById('contact-form');
+            const formStatus = document.getElementById('form-status');
+            const submitBtn = document.getElementById('contact-submit-btn');
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    // Ignore submission if the hidden anti-spam honeypot field is filled
+                    const honeypot = contactForm.querySelector('input[name="_gotcha"]');
+                    if (honeypot && honeypot.value) return;
+
+                    const humanInput = document.getElementById('human-check');
+                    if (humanInput) {
+                        if (humanInput.value.trim().toLowerCase() !== 'human') {
+                            formStatus.className = 'rounded-xl p-4 text-sm font-medium bg-amber-50 text-amber-800 border border-amber-200';
+                            formStatus.textContent = 'Please type "human" in the spam check box before sending.';
+                            return;
+                        }
+                        // Normalize to lowercase so mobile auto-capitalization ("Human") passes Google Form validation
+                        humanInput.value = humanInput.value.trim().toLowerCase();
+                    }
+
+                    const actionUrl = contactForm.getAttribute('action');
+                    const emailInput = document.getElementById('email');
+
+                    if (emailInput && emailInput.getAttribute('name').includes('YOUR_EMAIL_ENTRY_ID')) {
+                        formStatus.className = 'rounded-xl p-4 text-sm font-medium bg-amber-50 text-amber-800 border border-amber-200';
+                        formStatus.textContent = 'Almost done! Replace entry.YOUR_EMAIL_ENTRY_ID and entry.YOUR_MESSAGE_ENTRY_ID in index.html using your Google Form pre-filled link.';
+                        return;
+                    }
+
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-60');
+
+                    try {
+                        // Submit directly to Google Forms in the background using no-cors mode
+                        await fetch(actionUrl, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            body: new FormData(contactForm)
+                        });
+
+                        formStatus.className = 'rounded-xl p-4 text-sm font-medium bg-emerald-50 text-emerald-800 border border-emerald-200';
+                        formStatus.textContent = 'Thank you! Your message has been sent privately.';
+                        contactForm.reset();
+                    } catch (err) {
+                        formStatus.className = 'rounded-xl p-4 text-sm font-medium bg-red-50 text-red-800 border border-red-200';
+                        formStatus.textContent = 'Network error while sending message. Please try again.';
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-60');
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
