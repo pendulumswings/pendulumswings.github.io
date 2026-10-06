@@ -477,10 +477,9 @@
             // Randomly initialize into either Oscillation (E < 2mgL) or Rotation (E > 2mgL)
             function randomizeInitialState() {
                 const isRotation = Math.random() < 0.5;
-                let deg = 20 + Math.random() * 320;
-                if (Math.abs(deg - 180) < 8) {
-                    deg = deg < 180 ? 170 : 190;
-                }
+                // Pick an amplitude in [20 deg, 170 deg] and a random left/right side (- or +)
+                const signAngle = Math.random() < 0.5 ? 1 : -1;
+                const deg = signAngle * (20 + Math.random() * 150);
                 theta = (deg * Math.PI) / 180;
 
                 if (isRotation) {
@@ -505,8 +504,9 @@
                 }
 
                 if (readout) {
-                    const sign = omega > 0 ? '+' : '';
-                    readout.innerHTML = `&theta;₀ = ${deg.toFixed(0)}&deg;, &omega;₀ = ${sign}${omega.toFixed(1)} rad/s`;
+                    const signTheta = deg > 0 ? '+' : '';
+                    const signOmega = omega > 0 ? '+' : '';
+                    readout.innerHTML = `&theta;₀ = ${signTheta}${deg.toFixed(0)}&deg;, &omega;₀ = ${signOmega}${omega.toFixed(1)} rad/s`;
                 }
                 updateRender();
             }
