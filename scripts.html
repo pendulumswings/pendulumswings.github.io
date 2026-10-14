@@ -101,13 +101,18 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
-                        <!-- Chapter 2 Header -->
-                            <tr class="bg-brand-50 border-b border-brand-100">
+                        
+                            <!-- Chapter 2 Header (Now Clickable) -->
+                            <tr class="bg-brand-50 border-b border-brand-100 chapter-header cursor-pointer select-none hover:bg-brand-100/50 transition-colors" onclick="toggleChapter(this)">
                                 <td colspan="3" class="px-6 py-3 font-semibold text-brand-900">
-                                    Part I: Foundations — Chapter 2: Pendulum Fundamentals
+                                    <div class="flex items-center justify-between">
+                                        <span>Part I: Foundations — Chapter 2: Pendulum Fundamentals</span>
+                                        <svg class="w-5 h-5 text-brand-500 chevron-icon transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
                                 </td>
                             </tr>
-                           <!-- Chapter 2 Scripts -->
+                            
+                            <!-- Chapter 2 Scripts -->
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-brand-600 bg-slate-50 rounded-md mx-2 my-2 inline-block border border-slate-200">
                                     scripts/chapter2/energy_phase.ipynb
@@ -204,13 +209,19 @@
                                     </a>
                                 </td>
                             </tr>
-                            <!-- Chapter 3 Header -->
-                            <tr class="bg-brand-50 border-t border-b border-brand-100">
+                            
+                            <!-- Chapter 3 Header (Now Clickable) -->
+                            <tr class="bg-brand-50 border-t border-b border-brand-100 chapter-header cursor-pointer select-none hover:bg-brand-100/50 transition-colors" onclick="toggleChapter(this)">
                                 <td colspan="3" class="px-6 py-3 font-semibold text-brand-900">
-                                    Part I: Foundations — Chapter 3: Chapter 2 Exercises
+                                    <div class="flex items-center justify-between">
+                                        <span>Part I: Foundations — Chapter 3: Chapter 2 Exercises</span>
+                                        <svg class="w-5 h-5 text-brand-500 chevron-icon transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
                                 </td>
                             </tr>
-                             <tr class="hover:bg-slate-50 transition-colors">
+                            
+                            <!-- Chapter 3 Scripts -->
+                            <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-brand-600 bg-slate-50 rounded-md mx-2 my-2 inline-block border border-slate-200">
                                     scripts/chapter3/artist_trapeze_velocity.ipynb
                                 </td>
@@ -419,10 +430,13 @@
                                 </td>
                             </tr>
 
-                             <!-- Chapter 4 Header (Part II) -->
-                            <tr class="bg-amber-50 border-t border-b border-amber-200">
+                             <!-- Chapter 4 Header (Part II) - Now Clickable -->
+                            <tr class="bg-amber-50 border-t border-b border-amber-200 chapter-header cursor-pointer select-none hover:bg-amber-100/50 transition-colors" onclick="toggleChapter(this)">
                                 <td colspan="3" class="px-6 py-3 font-semibold text-amber-900">
-                                    Part II: Approximations — Chapter 4: Pendulum Approximations
+                                    <div class="flex items-center justify-between">
+                                        <span>Part II: Approximations — Chapter 4: Pendulum Approximations</span>
+                                        <svg class="w-5 h-5 text-amber-600 chevron-icon transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
                                 </td>
                             </tr>
                              <tr class="hover:bg-slate-50 transition-colors">
@@ -478,5 +492,22 @@
         </div>
     </footer>
 
+    <script>
+        // Toggles the visibility of scripts immediately under a chapter header
+        function toggleChapter(headerElement) {
+            // Rotate the chevron icon to point right when collapsed
+            const icon = headerElement.querySelector('.chevron-icon');
+            if (icon) {
+                icon.classList.toggle('-rotate-90');
+            }
+            
+            // Loop through following rows and toggle 'hidden' until the next chapter header
+            let nextRow = headerElement.nextElementSibling;
+            while (nextRow && !nextRow.classList.contains('chapter-header')) {
+                nextRow.classList.toggle('hidden');
+                nextRow = nextRow.nextElementSibling;
+            }
+        }
+    </script>
 </body>
 </html>
